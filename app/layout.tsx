@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 import "./globals.css" // Pointant vers le Tailwind généré
 
 import { ThemeProvider } from "@/components/shared/theme-provider"
-// import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,8 +33,8 @@ export default function RootLayout({
                 >
                     {children}
 
-                    {/* Notifications Shadcn globales - Réservé pour la Phase 3 (Composants UI purs) */}
-                    {/* <Toaster /> */}
+                    {/* Notifications globales Sonner */}
+                    <Toaster theme="dark" position="bottom-right" richColors />
 
                 </ThemeProvider>
             </body>

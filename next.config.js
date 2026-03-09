@@ -3,6 +3,10 @@ const nextConfig = {
     reactStrictMode: true,
     poweredByHeader: false, // Sécurité : masquer "X-Powered-By: Next.js"
 
+    experimental: {
+        optimizePackageImports: ["lucide-react", "framer-motion"],
+    },
+
     // Configuration des domaines autorisés pour les images (logos des outils)
     images: {
         remotePatterns: [

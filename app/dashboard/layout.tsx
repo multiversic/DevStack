@@ -1,7 +1,9 @@
-import { ReactNode } from "react"
+import { ReactNode, Suspense } from "react"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/lib/auth"
+import { PageTransition } from "@/components/shared/page-transition"
+import { DashboardSkeleton } from "@/components/shared/skeletons"
 
 // Composants Icones (Lucide React)
 import {
@@ -119,7 +121,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                 {/* Rendu dynamique de la page active (page.tsx) */}
                 <main className="flex-1 overflow-y-auto p-4 md:p-8">
                     <div className="mx-auto max-w-6xl">
-                        {children}
+                        <PageTransition>
+                            <Suspense fallback={<DashboardSkeleton />}>
+                                {children}
+                            </Suspense>
+                        </PageTransition>
                     </div>
                 </main>
             </div>

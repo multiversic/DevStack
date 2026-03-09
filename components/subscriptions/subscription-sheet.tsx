@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Plus, X } from "lucide-react"
+import { toast } from "sonner"
+import { LoadingButton } from "@/components/ui/loading-button"
 
 interface Tool {
     id: string
@@ -72,9 +74,11 @@ export function SubscriptionSheet({ catalogTools }: SubscriptionSheetProps) {
             setOpen(false)
             setForm({ toolName: "", category: "", price: "", currency: "USD", frequency: "MONTHLY", nextPayment: "", clientTag: "", usage: "HIGH", note: "" })
             setSelectedTool(null)
+            toast.success("Abonnement ajouté avec succès")
             router.refresh()
         } catch (err: any) {
             setError(err.message)
+            toast.error(err.message)
         } finally {
             setLoading(false)
         }
@@ -254,13 +258,13 @@ export function SubscriptionSheet({ catalogTools }: SubscriptionSheetProps) {
                                 >
                                     Annuler
                                 </button>
-                                <button
+                                <LoadingButton
                                     type="submit"
-                                    disabled={loading}
-                                    className="flex-1 h-10 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-medium transition-colors disabled:opacity-50"
+                                    loading={loading}
+                                    className="flex-1"
                                 >
-                                    {loading ? "Enregistrement..." : "Enregistrer"}
-                                </button>
+                                    Enregistrer
+                                </LoadingButton>
                             </div>
                         </form>
                     </div>

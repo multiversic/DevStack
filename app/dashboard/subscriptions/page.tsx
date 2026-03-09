@@ -12,8 +12,12 @@ import {
     MoreHorizontal,
     FileEdit,
     Trash2,
-    AlertCircle
+    AlertCircle,
+    Inbox
 } from "lucide-react"
+
+import { EmptyState } from "@/components/shared/empty-state"
+import { AnimatedTableBody, AnimatedTableRow } from "@/components/shared/animated-table"
 
 // Import des composants abstraits (à créer plus tard)
 // import { Button } from "@/components/ui/button"
@@ -124,15 +128,11 @@ export default async function SubscriptionsPage({
 
             {/* ÉTAT VIDE */}
             {subscriptions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-12 text-center rounded-xl border border-dashed border-border bg-card/50">
-                    <div className="h-12 w-12 rounded-full bg-accent text-muted-foreground flex items-center justify-center mb-4">
-                        <AlertCircle className="h-6 w-6" />
-                    </div>
-                    <h3 className="text-lg font-semibold tracking-tight">Aucun abonnement trouvé</h3>
-                    <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                        {searchQuery ? "Aucun outil ne correspond à votre recherche." : "Vous n'avez pas encore ajouté d'abonnement. Commencez par en ajouter un depuis le catalogue."}
-                    </p>
-                </div>
+                <EmptyState
+                    icon={searchQuery ? Search : Inbox}
+                    title="Aucun abonnement trouvé"
+                    description={searchQuery ? "Aucun outil ne correspond à votre recherche." : "Vous n'avez pas encore ajouté d'abonnement. Commencez par en ajouter un depuis le catalogue."}
+                />
             ) : (
                 /* TABLEAU DE DONNÉES (Desktop) */
                 <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden hidden md:block">
@@ -148,12 +148,15 @@ export default async function SubscriptionsPage({
                                 <th className="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <AnimatedTableBody className="divide-y divide-border">
                             {subscriptions.map((sub) => {
                                 const usageStyle = translateUsage(sub.usage)
 
                                 return (
-                                    <tr key={sub.id} className="hover:bg-accent/50 transition-colors">
+                                    <AnimatedTableRow
+                                        key={sub.id}
+                                        className="hover:bg-accent/50 transition-colors"
+                                    >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center gap-3">
                                                 <div className="h-8 w-8 rounded-md bg-muted border border-border shrink-0 flex items-center justify-center">
@@ -191,10 +194,10 @@ export default async function SubscriptionsPage({
                                                 <MoreHorizontal className="h-4 w-4" />
                                             </button>
                                         </td>
-                                    </tr>
+                                    </AnimatedTableRow>
                                 )
                             })}
-                        </tbody>
+                        </AnimatedTableBody>
                     </table>
                 </div>
             )}

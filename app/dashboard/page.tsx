@@ -7,6 +7,9 @@ import {
     CreditCard, LineChart, Wallet
 } from "lucide-react"
 
+import { AnimatedCardGroup, AnimatedCard } from "@/components/shared/animated-cards"
+import { AnimatedCounter } from "@/components/dashboard/animated-counter"
+
 export default async function DashboardPage() {
     const session = await auth()
     if (!session?.user) return null
@@ -110,35 +113,41 @@ export default async function DashboardPage() {
             )}
 
             {/* KPI GRID */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <AnimatedCardGroup className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                <AnimatedCard className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-row items-center justify-between pb-2">
                         <h3 className="text-sm font-medium text-muted-foreground">Coût Mensuel</h3>
                         <Wallet className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <div className="text-2xl font-bold">
-                        {formatCurrency(totalMonthlyLocal, userCurrency)}
+                        <AnimatedCounter
+                            value={totalMonthlyLocal}
+                            currency={userCurrency}
+                        />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                         {subscriptions.length} abonnement(s) actif(s)
                     </p>
-                </div>
+                </AnimatedCard>
 
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                <AnimatedCard className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-row items-center justify-between pb-2">
                         <h3 className="text-sm font-medium text-muted-foreground">Projection Annuelle</h3>
                         <LineChart className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <div className="text-2xl font-bold">
-                        {formatCurrency(totalAnnualLocal, userCurrency)}
+                        <AnimatedCounter
+                            value={totalAnnualLocal}
+                            currency={userCurrency}
+                        />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                         sur 12 mois
                     </p>
-                </div>
+                </AnimatedCard>
 
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                <AnimatedCard className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-row items-center justify-between pb-2">
                         <h3 className="text-sm font-medium text-muted-foreground">Prochain Prélèvement</h3>
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
@@ -156,20 +165,23 @@ export default async function DashboardPage() {
                             )}
                         </p>
                     )}
-                </div>
+                </AnimatedCard>
 
-                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                <AnimatedCard className="rounded-xl border border-border bg-card p-6 shadow-sm">
                     <div className="flex flex-row items-center justify-between pb-2">
                         <h3 className="text-sm font-medium text-muted-foreground">Part Refacturable</h3>
                         <ArrowUpRight className="h-4 w-4 text-success" />
                     </div>
                     <div className="text-2xl font-bold text-success">
-                        {formatCurrency(totalBillableLocal, userCurrency)}
+                        <AnimatedCounter
+                            value={totalBillableLocal}
+                            currency={userCurrency}
+                        />
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">/ mois</p>
-                </div>
+                </AnimatedCard>
 
-            </div>
+            </AnimatedCardGroup>
 
             {/* GRAPHIQUES & LISTES */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -217,8 +229,8 @@ export default async function DashboardPage() {
                                             <div>
                                                 <p className="font-medium text-sm leading-none">{payment.toolName}</p>
                                                 <span className={`mt-1.5 inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wider ${isUrgent
-                                                        ? "bg-destructive/10 text-destructive"
-                                                        : "bg-muted text-muted-foreground"
+                                                    ? "bg-destructive/10 text-destructive"
+                                                    : "bg-muted text-muted-foreground"
                                                     }`}>
                                                     {diffDays === 0 ? "Aujourd'hui" : diffDays < 0 ? "Dépassé" : `J-${diffDays}`}
                                                 </span>
