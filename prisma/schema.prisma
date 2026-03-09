@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Nécessaire pour Supabase (connexion directe sans pooler pour les migrations)
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String         // Hashé via bcrypt
+  currency      String         @default("XOF")
+  isPremium     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  subscriptions Subscription[]
+  sessions      Session[]
+  rateLimits    RateLimit[]
+
+  @@index([email])
+}
+
+// Session stockée pour NextAuth (si adaptateur BDD utilisé)
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Subscription {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  toolName    String
+  category    String
+  price       Float
+  currency    String    @default("USD")
+  frequency   Frequency
+  nextPayment DateTime
+  clientTag   String?   // Tag pour la refacturation
+  usage       Usage     @default(HIGH)
+  note        String?   // Notes optionnelles
+  isActive    Boolean   @default(true)
+  logoUrl     String?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  reminders   ReminderLog[]
+
+  // Index optimisés pour les requêtes dashboard
+  @@index([userId])
+  @@index([nextPayment])
+  @@index([clientTag])
+  @@index([userId, isActive])
+}
+
+model ToolCatalog {
+  id              String  @id @default(uuid())
+  name            String
+  category        String
+  website         String
+  defaultPrice    Float?
+  defaultCurrency String  @default("USD")
+  logoUrl         String?
+
+  @@index([category])
+  @@index([name])
+}
+
+model ReminderLog {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  sentAt         DateTime     @default(now())
+  type           ReminderType
+  channel        Channel      @default(EMAIL)
+
+  @@index([subscriptionId])
+  @@index([subscriptionId, type])
+}
+
+// Cache pour eviter les appels API externes
+model ExchangeRate {
+  id        String   @id @default(uuid())
+  currency  String   @unique
+  rate      Float
+  updatedAt DateTime @updatedAt
+}
+
+// Sécurité : Mécanisme anti-Brute Force (Login / Register / Reset Mail)
+model RateLimit {
+  id           String    @id @default(uuid())
+  identifier   String    // IP ou Email
+  action       String    // "login", "register", "reset"
+  attempts     Int       @default(1)
+  blockedUntil DateTime?
+  
+  userId       String?
+  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([identifier, action])
+  @@index([userId])
+}
+
+enum Frequency {
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum Usage {
+  HIGH
+  LOW
+  UNUSED
+}
+
+enum ReminderType {
+  D7
+  D3
+  D1
+  D0
+}
+
+enum Channel {
+  EMAIL
+  SMS
+}

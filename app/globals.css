@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;       /* Blanc pur en mode clair */
+    --foreground: 240 10% 3.9%;    /* Noir cassé */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    --primary: 243 75% 59%;        /* Indigo #4F46E5 */
+    --primary-foreground: 0 0% 98%;
+    
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    
+    --destructive: 0 84.2% 60.2%;  /* Red #EF4444 */
+    --destructive-foreground: 0 0% 98%;
+
+    --warning: 38 92% 50%;         /* Amber #F59E0B */
+    --warning-foreground: 0 0% 98%;
+
+    --success: 160 84% 39%;        /* Emerald #10B981 */
+    --success-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 243 75% 59%;           /* Ring focus Indigo */
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 3% 6%;       /* Very Dark #0F0F10 */
+    --foreground: 240 5% 96%;      /* Off-white #F1F1F3 */
+    
+    --card: 240 8% 11%;            /* Surface #1A1A1E */
+    --card-foreground: 240 5% 96%;
+    
+    --popover: 240 8% 11%;
+    --popover-foreground: 240 5% 96%;
+    
+    --primary: 243 75% 59%;        /* Indigo #4F46E5 reste lisible */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 240 5% 96%;
+    
+    --muted: 240 4% 16%;           /* #2A2A2E approx */
+    --muted-foreground: 240 5% 65%; /* #8A8A96 */
+    
+    --accent: 240 4% 16%;
+    --accent-foreground: 240 5% 96%;
+    
+    --destructive: 0 62.8% 30.6%;  /* Darker red background for alerts */
+    --destructive-foreground: 0 84.2% 60.2%; /* Bright red text */
+
+    --warning: 38 92% 20%;
+    --warning-foreground: 38 92% 50%;
+
+    --success: 160 84% 15%;
+    --success-foreground: 160 84% 39%;
+
+    --border: 240 4% 18%;          /* #2A2A2E border */
+    --input: 240 4% 18%;
+    --ring: 243 75% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
