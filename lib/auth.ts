@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "./db"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import authConfig from "./auth.config"
 
 // --- Extension stricte des types de NextAuth ---

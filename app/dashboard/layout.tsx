@@ -5,7 +5,6 @@ import { auth } from "@/lib/auth"
 import { PageTransition } from "@/components/shared/page-transition"
 import { DashboardSkeleton } from "@/components/shared/skeletons"
 
-// Composants Icones (Lucide React)
 import {
     BarChart3,
     CreditCard,
@@ -13,16 +12,13 @@ import {
     Settings,
     ShieldCheck,
     Menu,
-    LogOut,
     AppWindow
 } from "lucide-react"
 
 // Import de composants UI partagés
 import { MobileNav } from "@/components/layout/mobile-nav"
 import { DesktopNav } from "@/components/layout/desktop-nav"
-// import { Button } from "@/components/ui/button"
-// import { UserNav } from "@/components/dashboard/user-nav"
-// import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { LogoutButton } from "@/components/layout/logout-button"
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
     // 1. Vérification stricte de la session (Server Component)
@@ -57,14 +53,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                             <span className="truncate text-sm font-medium">{session.user.name}</span>
                             <span className="truncate text-xs text-muted-foreground">{session.user.email}</span>
                         </div>
-                        {/* 
-              On utilisera un Server Action pour le logout dans le build final, 
-              ici représenté par un bouton brut pour la structure 
-            */}
-                        <button className="rounded-md p-2 hover:bg-destructive/10 hover:text-destructive">
-                            <LogOut className="h-4 w-4" />
-                            <span className="sr-only">Se déconnecter</span>
-                        </button>
+                        <LogoutButton />
                     </div>
                 </div>
             </aside>
