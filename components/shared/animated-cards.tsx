@@ -1,39 +1,18 @@
-"use client"
-
-import { motion } from "framer-motion"
 import * as React from "react"
 
 export function AnimatedCardGroup({ children, className }: { children: React.ReactNode, className?: string }) {
     return (
-        <motion.div
-            className={className}
-            initial="hidden"
-            animate="visible"
-            variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                    opacity: 1,
-                    transition: { staggerChildren: 0.1 }
-                }
-            }}
-        >
+        <div className={className}>
             {children}
-        </motion.div>
+        </div>
     )
 }
 
 export function AnimatedCard({ children, className }: { children: React.ReactNode, className?: string }) {
     return (
-        <motion.div
-            className={className}
-            variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 }
-            }}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-        >
+        <div className={`animate-in fade-in slide-in-from-bottom-4 duration-300 hover:scale-[1.02] transition-transform ${className || ''}`}>
             {children}
-        </motion.div>
+        </div>
     )
 }
+

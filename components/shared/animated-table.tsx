@@ -1,37 +1,18 @@
-"use client"
-
-import { motion } from "framer-motion"
 import * as React from "react"
 
 export function AnimatedTableBody({ children, className }: { children: React.ReactNode, className?: string }) {
     return (
-        <motion.tbody
-            className={className}
-            initial="hidden"
-            animate="visible"
-            variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                    opacity: 1,
-                    transition: { staggerChildren: 0.05 }
-                }
-            }}
-        >
+        <tbody className={className}>
             {children}
-        </motion.tbody>
+        </tbody>
     )
 }
 
 export function AnimatedTableRow({ children, className }: { children: React.ReactNode, className?: string }) {
     return (
-        <motion.tr
-            className={className}
-            variants={{
-                hidden: { opacity: 0, y: 10 },
-                visible: { opacity: 1, y: 0 }
-            }}
-        >
+        <tr className={`animate-in fade-in duration-300 fill-mode-both ${className || ''}`}>
             {children}
-        </motion.tr>
+        </tr>
     )
 }
+

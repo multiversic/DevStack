@@ -4,7 +4,7 @@ const nextConfig = {
     poweredByHeader: false, // Sécurité : masquer "X-Powered-By: Next.js"
 
     experimental: {
-        optimizePackageImports: ["lucide-react", "framer-motion"],
+        optimizePackageImports: ["lucide-react"],
     },
 
     // Configuration des domaines autorisés pour les images (logos des outils)

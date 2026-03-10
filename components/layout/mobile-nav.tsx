@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import {
     BarChart3,
@@ -35,8 +35,11 @@ export function MobileNav() {
                     <span className="sr-only">Ouvrir le menu</span>
                 </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]" aria-describedby="mobile-nav-description">
                 <SheetTitle className="sr-only">Menu de navigation</SheetTitle>
+                <SheetDescription id="mobile-nav-description" className="sr-only">
+                    Menu contenant les liens vers les principales sections du tableau de bord.
+                </SheetDescription>
                 <div className="flex h-16 items-center border-b border-border mb-4">
                     <Link
                         href="/dashboard"

@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { motion, useSpring, useTransform } from "framer-motion"
 import { useEffect, useState } from "react"
 import { formatCurrency } from "@/lib/utils"
 
@@ -19,6 +18,7 @@ export function AnimatedCounter({
     className = ""
 }: AnimatedCounterProps) {
 
+    const [count, setCount] = useState(0)
     const [isClient, setIsClient] = useState(false)
     const prefersReduced = typeof window !== 'undefined' ? window.matchMedia("(prefers-reduced-motion: reduce)").matches : false
 
@@ -26,33 +26,49 @@ export function AnimatedCounter({
         setIsClient(true)
     }, [])
 
-    // Animation values
-    const springValue = useSpring(0, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    })
-
-    // Start animation when value changes
     useEffect(() => {
         if (prefersReduced) {
-            springValue.set(value) // Instant if reduced motion
-        } else {
-            springValue.set(value)
+            setCount(value)
+            return
         }
-    }, [value, springValue, prefersReduced])
 
-    const display = useTransform(springValue, (current) => {
-        return currency ? formatCurrency(current, currency) : Math.round(current).toString()
-    })
+        let start = 0
+        const end = value
+        if (start === end) {
+            setCount(value)
+            return
+        }
 
-    if (!isClient) {
-        return <span className={className}>{currency ? formatCurrency(value, currency) : value}</span>
-    }
+        let startTime: number | null = null
+        let animationFrame: number
+
+        const step = (timestamp: number) => {
+            if (!startTime) startTime = timestamp
+            const progress = Math.min((timestamp - startTime) / duration, 1)
+            // ease out cubic
+            const easeProgress = 1 - Math.pow(1 - progress, 3)
+            setCount(progress === 1 ? end : start + (end - start) * easeProgress)
+
+            if (progress < 1) {
+                animationFrame = window.requestAnimationFrame(step)
+            }
+        }
+
+        animationFrame = window.requestAnimationFrame(step)
+
+        return () => {
+            if (animationFrame) window.cancelAnimationFrame(animationFrame)
+        }
+    }, [value, duration, prefersReduced])
+
+    const displayValue = currency
+        ? formatCurrency(isClient ? count : value, currency)
+        : Math.round(isClient ? count : value).toString()
 
     return (
-        <motion.span className={className}>
-            {display}
-        </motion.span>
+        <span className={className}>
+            {displayValue}
+        </span>
     )
 }
+
