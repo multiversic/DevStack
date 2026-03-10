@@ -23,28 +23,25 @@ export default auth((req) => {
     const { nextUrl } = req
     const isLoggedIn = !!req.auth
 
-    console.log("isLoggedIn", isLoggedIn)
-    console.log("nextUrl", nextUrl)
-
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-    // if (isApiAuthRoute) return
+    if (isApiAuthRoute) return
 
-    // if (isAuthRoute) {
-    //     if (isLoggedIn) {
-    //         return Response.redirect(new URL("/dashboard", nextUrl))
-    //     }
-    //     return
-    // }
+    if (isAuthRoute) {
+        if (isLoggedIn) {
+            return Response.redirect(new URL("/dashboard", nextUrl))
+        }
+        return
+    }
 
-    // if (!isLoggedIn && !isPublicRoute) {
-    //     let callbackUrl = nextUrl.pathname
-    //     if (nextUrl.search) callbackUrl += nextUrl.search
-    //     const encodedCallbackUrl = encodeURIComponent(callbackUrl)
-    //     return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
-    // }
+    if (!isLoggedIn && !isPublicRoute) {
+        let callbackUrl = nextUrl.pathname
+        if (nextUrl.search) callbackUrl += nextUrl.search
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
+        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+    }
 
     return
 })
