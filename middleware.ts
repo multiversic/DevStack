@@ -1,53 +1,42 @@
-// middleware.ts
-import NextAuth from "next-auth"
-import authConfig from "./lib/auth.config"
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-const { auth } = NextAuth(authConfig)
+const publicRoutes = ["/", "/auth/login", "/auth/register"]
+const authRoutes = ["/auth/login", "/auth/register"]
 
-const publicRoutes = [
-    "/",
-    "/auth/login",
-    "/auth/register",
-    "/api/cron/reminders",
-    "/api/cron/exchange-rates"
-]
+export async function middleware(req: NextRequest) {
+    const token = await getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+    })
 
-const authRoutes = [
-    "/auth/login",
-    "/auth/register",
-]
+    const { pathname } = req.nextUrl
+    const isLoggedIn = !!token
+    const isAuthRoute = authRoutes.includes(pathname)
+    const isPublicRoute = publicRoutes.includes(pathname)
+    const isApiAuth = pathname.startsWith("/api/auth")
+    const isApiCron = pathname.startsWith("/api/cron")
 
-const apiAuthPrefix = "/api/auth"
+    // Toujours laisser passer les routes API
+    if (isApiAuth || isApiCron) return NextResponse.next()
 
-export default auth((req) => {
-    const { nextUrl } = req
-    const isLoggedIn = !!req.auth
-
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
-    const isAuthRoute = authRoutes.includes(nextUrl.pathname)
-
-    if (isApiAuthRoute) return
-
-    if (isAuthRoute) {
-        if (isLoggedIn) {
-            return Response.redirect(new URL("/dashboard", nextUrl))
-        }
-        return
+    // Si connecté et sur page auth → dashboard
+    if (isLoggedIn && isAuthRoute) {
+        return NextResponse.redirect(new URL("/dashboard", req.url))
     }
 
-    if (!isLoggedIn && !isPublicRoute) {
-        let callbackUrl = nextUrl.pathname
-        if (nextUrl.search) callbackUrl += nextUrl.search
-        const encodedCallbackUrl = encodeURIComponent(callbackUrl)
-        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
+    // Si non connecté et route protégée → login
+    if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+        const callbackUrl = encodeURIComponent(pathname)
+        return NextResponse.redirect(
+            new URL(`/auth/login?callbackUrl=${callbackUrl}`, req.url)
+        )
     }
 
-    return
-})
+    return NextResponse.next()
+}
 
 export const config = {
-    matcher: [
-        "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
-    ],
+    matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 }
