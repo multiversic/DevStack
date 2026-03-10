@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import "./globals.css" // Pointant vers le Tailwind généré
 
 import { ThemeProvider } from "@/components/shared/theme-provider"
+import { AuthProvider } from "@/components/shared/auth-provider"
 import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -31,11 +32,11 @@ export default function RootLayout({
                     enableSystem={false}
                     disableTransitionOnChange
                 >
-                    {children}
-
-                    {/* Notifications globales Sonner */}
-                    <Toaster theme="dark" position="bottom-right" richColors />
-
+                    <AuthProvider>
+                        {children}
+                        {/* Notifications globales Sonner */}
+                        <Toaster theme="dark" position="bottom-right" richColors />
+                    </AuthProvider>
                 </ThemeProvider>
             </body>
         </html>

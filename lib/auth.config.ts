@@ -1,9 +1,11 @@
-import type { NextAuthConfig } from "next-auth"
+import type { NextConfig } from "next"
 
-export default {
+const authConfig = {
     providers: [],
     trustHost: true,
     pages: {
         signIn: "/auth/login",
     },
-} satisfies NextAuthConfig
+}
+
+export default authConfig
