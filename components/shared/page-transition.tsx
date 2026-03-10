@@ -1,24 +1,25 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useRef } from "react"
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
-    const [prefersReduced, setPrefersReduced] = useState(false)
+    const ref = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        setPrefersReduced(
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        )
+        const el = ref.current
+        if (!el) return
+        el.style.opacity = "0"
+        el.style.transform = "translateY(8px)"
+        requestAnimationFrame(() => {
+            el.style.transition = "opacity 0.2s ease-out, transform 0.2s ease-out"
+            el.style.opacity = "1"
+            el.style.transform = "translateY(0)"
+        })
     }, [])
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: prefersReduced ? 0 : 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-        >
+        <div ref={ref} style={{ opacity: 0 }}>
             {children}
-        </motion.div>
+        </div>
     )
 }
