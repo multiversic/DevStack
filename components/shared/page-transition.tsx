@@ -1,10 +1,16 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
-    // Respecting the user's OS preference for reduced motion
-    const prefersReduced = typeof window !== 'undefined' ? window.matchMedia("(prefers-reduced-motion: reduce)").matches : false
+    const [prefersReduced, setPrefersReduced] = useState(false)
+
+    useEffect(() => {
+        setPrefersReduced(
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+    }, [])
 
     return (
         <motion.div
