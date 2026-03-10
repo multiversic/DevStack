@@ -17,9 +17,10 @@ import {
     AppWindow
 } from "lucide-react"
 
-// Import de composants UI partagés (à créer)
+// Import de composants UI partagés
+import { MobileNav } from "@/components/layout/mobile-nav"
+import { DesktopNav } from "@/components/layout/desktop-nav"
 // import { Button } from "@/components/ui/button"
-// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 // import { UserNav } from "@/components/dashboard/user-nav"
 // import { ThemeToggle } from "@/components/shared/theme-toggle"
 
@@ -31,14 +32,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         redirect("/auth/login")
     }
 
-    // 2. Définition des liens de la sidebar
-    const navLinks = [
-        { href: "/dashboard", icon: LayoutDashboard, label: "Vue d'ensemble" },
-        { href: "/dashboard/subscriptions", icon: AppWindow, label: "Mes abonnements" },
-        { href: "/dashboard/billing", icon: CreditCard, label: "Refacturation" },
-        { href: "/dashboard/audit", icon: ShieldCheck, label: "Stack Audit" },
-        { href: "/dashboard/settings", icon: Settings, label: "Paramètres" },
-    ]
+    // Les liens de la sidebar ont été déplacés dans DesktopNav et MobileNav
 
     return (
         <div className="flex min-h-screen flex-col bg-background text-foreground md:flex-row">
@@ -54,21 +48,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                     </Link>
                 </div>
 
-                <nav className="flex-1 space-y-1 p-4">
-                    {navLinks.map((link) => {
-                        const Icon = link.icon
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground"
-                            >
-                                <Icon className="h-4 w-4" />
-                                {link.label}
-                            </Link>
-                        )
-                    })}
-                </nav>
+                <DesktopNav />
 
                 {/* Espace bas de sidebar : Mini profil utilisateur + Déconnexion */}
                 <div className="border-t border-border p-4">
@@ -101,11 +81,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {/* Remplacé plus tard par le composant Sheet de shadcn */}
-                        <button className="flex h-9 w-9 items-center justify-center rounded-md border border-border">
-                            <Menu className="h-5 w-5" />
-                            <span className="sr-only">Ouvrir le menu</span>
-                        </button>
+                        <MobileNav />
                     </div>
                 </header>
 
