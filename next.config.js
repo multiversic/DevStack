@@ -5,7 +5,7 @@ const nextConfig = {
 
     experimental: {
         optimizePackageImports: ["lucide-react"],
-        serverComponentsExternalPackages: ["bcryptjs"],
+        serverExternalPackages: ["bcryptjs"],
     },
 
     // Configuration des domaines autorisés pour les images (logos des outils)
