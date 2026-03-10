@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { PageTransition } from "@/components/shared/page-transition"
-// import { DashboardSkeleton } from "@/components/shared/skeletons"
+import { DashboardSkeleton } from "@/components/shared/skeletons"
 
 // Composants Icones (Lucide React)
 import {
@@ -122,7 +122,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
                 <main className="flex-1 overflow-y-auto p-4 md:p-8">
                     <div className="mx-auto max-w-6xl">
                         <PageTransition>
-                            <Suspense >
+                            <Suspense fallback={<DashboardSkeleton />}>
                                 {children}
                             </Suspense>
                         </PageTransition>
