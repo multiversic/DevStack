@@ -55,3 +55,5 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Impossible de synchroniser les devises" }, { status: 500 })
     }
 }
+
+export const runtime = "nodejs"

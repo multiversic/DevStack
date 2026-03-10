@@ -78,3 +78,5 @@ export async function DELETE(
         return NextResponse.json({ error: "Une erreur inattendue est survenue" }, { status: 500 })
     }
 }
+
+export const runtime = "nodejs"

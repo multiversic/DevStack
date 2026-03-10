@@ -98,3 +98,5 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Erreur interne du cron" }, { status: 500 })
     }
 }
+
+export const runtime = "nodejs"
